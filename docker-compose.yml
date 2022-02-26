@@ -1,0 +1,32 @@
+version: "3"
+services:
+  reverse-proxy:
+    image: nginx
+    container_name: nginx_proxy
+    restart: always
+    depends_on:
+      - mycv
+      - test1
+    volumes:
+      - ./nginxProxy/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginxProxy/log:/var/log/nginx/
+    ports:
+      - 80:80
+  ##
+  mycv:
+    build: ./mycv
+    container_name: mycv
+    restart: always
+    volumes:
+      - ./mycv/public:/usr/local/apache2/htdocs/
+    ports:
+      - 8080:80
+  ##
+  test1:
+    build: ./test1
+    container_name: test1
+    restart: always
+    volumes:
+      - ./test1/public:/usr/local/apache2/htdocs/
+    ports:
+      - 8081:80
